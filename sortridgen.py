@@ -14,10 +14,10 @@ import sys
 
 
 DEF_DICT_DIR = os.path.join(os.path.dirname(__file__), "dictionaries")
-DEF_MAINDICT_PATHS = [os.path.join(DEF_DICT_DIR, "english/ejdict_level2_words.csv"), ]
+DEF_MAINDICT_PATHS = [os.path.join(DEF_DICT_DIR, "english/ejdic-hand_level2.csv"), ]
 DEF_SUBDICT_PATHS = [
-    os.path.join(DEF_DICT_DIR, "english/ejdict_level1_words.csv"),
-    os.path.join(DEF_DICT_DIR, "english/ejdict_level0_words.csv")
+    os.path.join(DEF_DICT_DIR, "english/ejdic-hand_level1.csv"),
+    os.path.join(DEF_DICT_DIR, "english/ejdic-hand_level0.csv")
 ]
 DEF_WORDLEN_MIN = 5
 
