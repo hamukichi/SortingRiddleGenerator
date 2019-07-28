@@ -76,6 +76,7 @@ def problem_setter(main_orig2sorted, sorted2origs):
             elif ans == "GIVEUP":
                 print("Oops! :( The answer is {}".format(orig_word))
                 res["giveup"] += 1
+                break
             elif ans.startswith("HINT"):
                 try:
                     _, n0 = ans.split()
