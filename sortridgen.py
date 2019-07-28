@@ -14,6 +14,7 @@ import sys
 
 
 DEF_DICT_DIR = os.path.join(os.path.dirname(__file__), "dictionaries")
+DEF_PRESET_DIR = os.path.join(os.path.dirname(__file__), "presets")
 DEF_MAINDICT_PATHS = [os.path.join(DEF_DICT_DIR, "english/ejdic-hand_level2.csv"), ]
 DEF_SUBDICT_PATHS = [
     os.path.join(DEF_DICT_DIR, "english/ejdic-hand_level1.csv"),
