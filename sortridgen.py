@@ -8,6 +8,7 @@
 import argparse
 import collections
 import csv
+import json
 import os
 import random
 import sys
@@ -15,17 +16,24 @@ import sys
 
 DEF_DICT_DIR = os.path.join(os.path.dirname(__file__), "dictionaries")
 DEF_PRESET_DIR = os.path.join(os.path.dirname(__file__), "presets")
-DEF_MAINDICT_PATHS = [os.path.join(DEF_DICT_DIR, "english/ejdic-hand_level2.csv"), ]
-DEF_SUBDICT_PATHS = [
-    os.path.join(DEF_DICT_DIR, "english/ejdic-hand_level1.csv"),
-    os.path.join(DEF_DICT_DIR, "english/ejdic-hand_level0.csv")
-]
+DEF_PRESET_NAME = "ejdic-hand-level2"
 DEF_WORDLEN_MIN = 5
 
 
+def parse_preset(preset_name, preset_dir=DEF_PRESET_DIR, dict_dir=DEF_DICT_DIR):
+    preset_name = preset_name.replace(".json", "")
+    preset_file = os.path.join(preset_dir, preset_name + ".json")
+    maindicts = []
+    subdicts = []
+    with open(preset_file, encoding="utf-8") as pre:
+        pre_data = json.load(pre)
+        maindicts.extend(d.replace(":dictionaries:", dict_dir) for d in pre_data["maindicts"])
+        subdicts.extend(d.replace(":dictionaries:", dict_dir) for d in pre_data["subdicts"])
+    return maindicts, subdicts
+
+
 def extract_words(
-    maindics=DEF_MAINDICT_PATHS,
-    subdics=DEF_SUBDICT_PATHS,
+    maindics, subdics,
     wordlen_min=DEF_WORDLEN_MIN):
     # read the main dictionary
     main_orig2sorted = dict()
@@ -112,19 +120,13 @@ def main():
     )
     # add arguments
     parser.add_argument(
-        "--maindics",
-        help="the path to the main dictionary files (*.csv).",
-        default=DEF_MAINDICT_PATHS,
-        action="append"
-    )
-    parser.add_argument(
-        "--subdics",
-        help="the path to the sub dictionary files (*.csv).",
-        default=DEF_SUBDICT_PATHS,
-        action="append"
+        "--preset",
+        help="the name of preset file (*.json files in /presets/)",
+        default=DEF_PRESET_NAME
     )
     args = parser.parse_args()
-    main_orig2sorted, sorted2origs = extract_words(args.maindics, args.subdics)
+    maindics, subdics = parse_preset(args.preset)
+    main_orig2sorted, sorted2origs = extract_words(maindics, subdics)
     problem_setter(main_orig2sorted, sorted2origs)
 
 
