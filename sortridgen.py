@@ -123,7 +123,7 @@ def main():
         action="append"
     )
     args = parser.parse_args()
-    main_orig2sorted, sorted2origs = extract_words(args.maindic, args.subdics)
+    main_orig2sorted, sorted2origs = extract_words(args.maindics, args.subdics)
     problem_setter(main_orig2sorted, sorted2origs)
 
 
