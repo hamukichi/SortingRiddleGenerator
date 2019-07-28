@@ -20,7 +20,7 @@ SortRiddleMaker: ソートなぞなぞの出題
 
 あらかじめ，Python 3.x を導入してください．作者は Windows 10 上の Python 3.7.0 で動作確認をしました．
 当リポジトリ内のファイル，ディレクトリを適当な場所に配置してください．
-コンソールで ``python sortridgen.py --help``（環境によっては ``python3`` など）を実行し，
+コンソールで ``python sortridgen.py --help`` を実行し，
 コマンドライン引数の入力方法の説明が表示されれば，導入はできています．
 
 使い方
