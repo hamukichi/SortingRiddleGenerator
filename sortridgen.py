@@ -6,6 +6,8 @@
 
 
 import argparse
+import collections
+import csv
 import os
 
 
@@ -15,6 +17,34 @@ DEF_SUBDICT_PATHS = (
     os.path.join(DEF_DICT_DIR, "english/ejdict_level1_words.csv"),
     os.path.join(DEF_DICT_DIR, "english/ejdict_level2_words.csv")
 )
+DEF_WORDLEN_MIN = 5
+
+
+def extract_words(
+    maindic=DEF_DICTFILE_PATH,
+    subdics=DEF_SUBDICT_PATHS,
+    wordlen_min=DEF_WORDLEN_MIN):
+    # read the main dictionary
+    main_orig2sorted = dict()
+    sorted2origs = collections.defaultdict(set)
+    with open(maindic, encoding="utf-8") as mdf:
+        reader = csv.DictReader(df)
+        for row in reader:
+            orig_word = row["orig_word"]
+            sorted_word = row["sorted_word"]
+            if len(orig_word) >= wordlen_min:
+                main_orig2sorted[orig_word] = sorted_word
+                sorted2origs[sorted_word].add(orig_word)
+    # read the sub dictionary. boiler plate...
+    for subdic in subdics:
+        with open(subdic, encoding="utf-8") as sdf:
+            reader = csv.DictReader(sdf)
+            for row in reader:
+                orig_word = row["orig_word"]
+                sorted_word = row["sorted_word"]
+                if len(orig_word) >= wordlen_min:
+                    sorted2origs[sorted_word].add(orig_word)
+    return main_orig2sorted, sorted2origs
 
 
 def main():
