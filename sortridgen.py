@@ -14,30 +14,30 @@ import sys
 
 
 DEF_DICT_DIR = os.path.join(os.path.dirname(__file__), "dictionaries")
-DEF_DICTFILE_PATH = os.path.join(DEF_DICT_DIR, "english/ejdict_level2_words.csv")
-DEF_SUBDICT_PATHS = (
-    DEF_DICTFILE_PATH,
+DEF_MAINDICT_PATHS = [os.path.join(DEF_DICT_DIR, "english/ejdict_level2_words.csv"), ]
+DEF_SUBDICT_PATHS = [
     os.path.join(DEF_DICT_DIR, "english/ejdict_level1_words.csv"),
     os.path.join(DEF_DICT_DIR, "english/ejdict_level0_words.csv")
-)
+]
 DEF_WORDLEN_MIN = 5
 
 
 def extract_words(
-    maindic=DEF_DICTFILE_PATH,
+    maindics=DEF_MAINDICT_PATHS,
     subdics=DEF_SUBDICT_PATHS,
     wordlen_min=DEF_WORDLEN_MIN):
     # read the main dictionary
     main_orig2sorted = dict()
     sorted2origs = collections.defaultdict(set)
-    with open(maindic, encoding="utf-8") as mdf:
-        reader = csv.DictReader(mdf)
-        for row in reader:
-            orig_word = row["orig_word"]
-            sorted_word = row["sorted_word"]
-            if len(orig_word) >= wordlen_min:
-                main_orig2sorted[orig_word] = sorted_word
-                sorted2origs[sorted_word].add(orig_word)
+    for maindic in maindics:
+        with open(maindic, encoding="utf-8") as mdf:
+            reader = csv.DictReader(mdf)
+            for row in reader:
+                orig_word = row["orig_word"]
+                sorted_word = row["sorted_word"]
+                if len(orig_word) >= wordlen_min:
+                    main_orig2sorted[orig_word] = sorted_word
+                    sorted2origs[sorted_word].add(orig_word)
     # read the sub dictionary. boiler plate...
     for subdic in subdics:
         with open(subdic, encoding="utf-8") as sdf:
@@ -111,9 +111,10 @@ def main():
     )
     # add arguments
     parser.add_argument(
-        "--maindic",
-        help="the path to the main dictionary file (*.csv).",
-        default=DEF_DICTFILE_PATH
+        "--maindics",
+        help="the path to the main dictionary files (*.csv).",
+        default=DEF_MAINDICT_PATHS,
+        action="append"
     )
     parser.add_argument(
         "--subdics",
