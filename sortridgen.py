@@ -27,12 +27,12 @@ def main():
     )
     # add arguments
     parser.add_argument(
-        "maindic",
+        "--maindic",
         help="the path to the main dictionary file (*.csv).",
         default=DEF_DICTFILE_PATH
     )
     parser.add_argument(
-        "subdic",
+        "--subdic",
         help="the path to the sub dictionary files (*.csv).",
         default=DEF_SUBDICT_PATHS,
         action="append"
