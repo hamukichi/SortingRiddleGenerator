@@ -9,7 +9,7 @@ import argparse
 import os
 
 
-DEF_DICT_DIR = os.path.join(__file__, "dictionaries")
+DEF_DICT_DIR = os.path.join(os.path.dirname(__file__), "dictionaries")
 DEF_DICTFILE_PATH = os.path.join(DEF_DICT_DIR, "english/ejdict_level0_words.csv")
 DEF_SUBDICT_PATHS = (
     os.path.join(DEF_DICT_DIR, "english/ejdict_level1_words.csv"),
