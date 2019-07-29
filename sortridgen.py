@@ -4,6 +4,11 @@
 """Sorting Riddle Generator
 """
 
+__author__ = "Hamukichi (Nombiri)"
+__version__ = "0.0.1"
+__date__ = "2019-07-29"
+__license__ = "MIT License"
+
 
 import argparse
 import collections
