@@ -31,7 +31,7 @@ class RiddleDictionary(object):
         self.dicname = os.path.basename(filename)
         self.origwords = []
         self.sorted2origs = collections.defaultdict(set)
-        with open(filenmae, encoding="utf-8") as df:
+        with open(filename, encoding="utf-8") as df:
             reader = csv.DictReader(df)
             for row in reader:
                 orig_word = row["orig_word"]
