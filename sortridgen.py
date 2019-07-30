@@ -27,11 +27,12 @@ DEF_WORDLEN_MIN = 5
 
 class RiddleDictionary(object):
 
-    def __init__(self, filename):
-        self.dicname = os.path.basename(filename)
+    def __init__(self, dict_name, dict_dir=DEF_DICT_DIR):
+        self.dict_name = os.path.basename(dict_name)
+        self.dict_file = os.path.join(dict_dir, dict_name)
         self.origwords = []
         self.sorted2origs = collections.defaultdict(set)
-        with open(filename, encoding="utf-8") as df:
+        with open(self.dict_file, encoding="utf-8") as df:
             reader = csv.DictReader(df)
             for row in reader:
                 orig_word = row["orig_word"]
@@ -44,6 +45,12 @@ class RiddleDictionary(object):
     
     def all_possible_orig_words(self, sorted_word):
         return self.sorted2origs[sorted_word]
+
+
+class RiddlePresets(object):
+
+    def __init__(self, filename):
+        pass
 
 
 def parse_preset(preset_name, preset_dir=DEF_PRESET_DIR, dict_dir=DEF_DICT_DIR):
