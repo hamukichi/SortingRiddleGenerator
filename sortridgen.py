@@ -25,6 +25,27 @@ DEF_PRESET_NAME = "ejdic-hand-level2"
 DEF_WORDLEN_MIN = 5
 
 
+class RiddleDictionary(object):
+
+    def __init__(self, filename):
+        self.dicname = os.path.basename(filename)
+        self.origwords = []
+        self.sorted2origs = collections.defaultdict(set)
+        with open(filenmae, encoding="utf-8") as df:
+            reader = csv.DictReader(df)
+            for row in reader:
+                orig_word = row["orig_word"]
+                sorted_word = row["sorted_word"]
+                self.origwords.append(orig_word)
+                self.sorted2origs[sorted_word].add(orig_word)
+    
+    def enumerate_orig_words(self):
+        return self.origwords
+    
+    def all_possible_orig_words(self, sorted_word):
+        return self.sorted2origs[sorted_word]
+
+
 def parse_preset(preset_name, preset_dir=DEF_PRESET_DIR, dict_dir=DEF_DICT_DIR):
     preset_name = preset_name.replace(".json", "")
     preset_file = os.path.join(preset_dir, preset_name + ".json")
