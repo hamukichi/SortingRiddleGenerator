@@ -21,7 +21,7 @@ import sys
 
 DEF_DICT_DIR = os.path.join(os.path.dirname(__file__), "dictionaries")
 DEF_PRESET_DIR = os.path.join(os.path.dirname(__file__), "presets")
-DEF_PRESET_NAME = "ejdic-hand-level2"
+DEF_PRESET_NAME = "default.json"
 DEF_WORDLEN_MIN = 5
 
 
@@ -62,9 +62,10 @@ class RiddleDictionary(object):
         return self.sorted2origs[sorted_word]
 
 
-class RiddlePresets(object):
 
-    def __init__(self, filename):
+class RiddlePreset(object):
+
+    def __init__(self, preset_path):
         pass
 
 
