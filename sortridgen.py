@@ -27,9 +27,9 @@ DEF_WORDLEN_MIN = 5
 
 class RiddleDictionary(object):
 
-    def __init__(self, dict_name, dict_dir=DEF_DICT_DIR):
-        self.dict_name = os.path.basename(dict_name)
-        self.dict_file = os.path.join(dict_dir, dict_name)
+    def __init__(self, dict_path,):
+        self.dict_name = os.path.basename(dict_path)
+        self.dict_file = None
         self.origwords = []
         self.sorted2origs = collections.defaultdict(set)
         with open(self.dict_file, encoding="utf-8") as df:
