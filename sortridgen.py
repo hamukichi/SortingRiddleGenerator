@@ -29,11 +29,22 @@ class RiddleGeneratorError(Exception):
     pass
 
 
+def find_file(path, def_dir):
+    if os.path.exists(path):
+        return os.path.abspath(path)
+    else:
+        path_cand = os.path.join(def_dir, path)
+        if os.path.exists(path_cand):
+            return os.path.abspath(path_cand)
+        else:
+            raise RiddleGeneratorError("Could not find {}".format(path))
+
+
 class RiddleDictionary(object):
 
-    def __init__(self, dict_path,):
+    def __init__(self, dict_path):
         self.dict_name = os.path.basename(dict_path)
-        self.dict_file = None
+        self.dict_file = find_file(dict_path, DEF_DICT_DIR)
         self.origwords = []
         self.sorted2origs = collections.defaultdict(set)
         with open(self.dict_file, encoding="utf-8") as df:
