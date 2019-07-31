@@ -25,6 +25,10 @@ DEF_PRESET_NAME = "ejdic-hand-level2"
 DEF_WORDLEN_MIN = 5
 
 
+class RiddleGeneratorError(Exception):
+    pass
+
+
 class RiddleDictionary(object):
 
     def __init__(self, dict_path,):
