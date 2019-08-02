@@ -13,6 +13,7 @@ __license__ = "MIT License"
 import argparse
 import collections
 import csv
+import itertools
 import json
 import os
 import random
@@ -54,19 +55,32 @@ class RiddleDictionary(object):
                 sorted_word = row["sorted_word"]
                 self.origwords.append(orig_word)
                 self.sorted2origs[sorted_word].add(orig_word)
-    
-    def enumerate_orig_words(self):
-        return self.origwords
-    
-    def all_possible_orig_words(self, sorted_word):
-        return self.sorted2origs[sorted_word]
-
 
 
 class RiddlePreset(object):
 
     def __init__(self, preset_path):
-        pass
+        self.preset_name = os.path.basename(preset_path)
+        self.preset_file = find_file(preset_path, DEF_PRESET_DIR)
+        self.preset_args = None
+        with open(find_file(preset_path, DEF_PRESET_NAME), encoding="utf-8") as def_pre:
+            self.preset_args = json.load(def_pre)
+        with open(self.preset_file, encoding="utf-8") as pre:
+            new_args = json.load(pre)
+            for key, val in new_args.items():
+                self.preset_args[key] = val.replace(":default:", self.preset_args[key])
+        self.preset_args["maindics"] = [dic.replace(":dictionaries:", DEF_DICT_DIR) for dic in self.preset_args["maindics"]]
+        self.preset_args["subdics"] = [dic.replace(":dictionaries:", DEF_DICT_DIR) for dic in self.preset_args["subdics"]]
+        self.maindics = [RiddleDictionary(dic) for dic in self.preset_args["maindics"]]
+        self.subdics = [RiddleDictionary(dic) for dic in self.preset_args["subdics"]]
+        self.prob_sorted_words = set()
+        for maindic in self.maindics:
+            self.prob_sorted_words.update(maindic.sorted2origs.keys())
+        self.all_sorted2origs = collections.defaultdict(set)
+        for dic in itertools.chain(self.maindics, self.subdics):
+            for k, vals in dic.sorted2origs.items():
+                self.all_sorted2origs[k].update(vals)
+
 
 
 def parse_preset(preset_name, preset_dir=DEF_PRESET_DIR, dict_dir=DEF_DICT_DIR):
