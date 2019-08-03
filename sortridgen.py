@@ -17,11 +17,13 @@ import itertools
 import json
 import logging
 import os
+import pathlib
 import random
 
 
-DEF_DICT_DIR = os.path.join(os.path.dirname(__file__), "dictionaries")
-DEF_PRESET_DIR = os.path.join(os.path.dirname(__file__), "presets")
+PROG_ROOT_DIR = pathlib.Path(__file__).parent.resolve()
+DEF_DICT_DIR = os.path.join(PROG_ROOT_DIR, "dictionaries")
+DEF_PRESET_DIR = os.path.join(PROG_ROOT_DIR, "presets")
 DEF_PRESET_NAME = "default.json"
 DEF_SRG_LOGGER = logging.getLogger(__name__)
 DEF_SRG_LOGGER.addHandler(logging.NullHandler())
@@ -32,6 +34,7 @@ class RiddleGeneratorError(Exception):
 
 
 def locate_file(path, default_directory, logger=DEF_SRG_LOGGER):
+    path = path.replace("/", os.sep)
     if os.path.exists(path):
         res = os.path.abspath(path)
         logger.info("The file exists: {}".format(res))
@@ -41,9 +44,8 @@ def locate_file(path, default_directory, logger=DEF_SRG_LOGGER):
             default_directory))
         path_cand = os.path.join(default_directory, path)
         if os.path.exists(path_cand):
-            res = os.path.abspath(path)
-            logger.info("The file exists: {}".format(res))
-            return res
+            logger.info("The file exists: {}".format(path_cand))
+            return path_cand
         else:
             msg = "Could not find {}".format(path)
             logger.error(msg)
@@ -83,7 +85,7 @@ class RiddleDictionary(object):
         self.dict_name = os.path.basename(self.dict_file)
         self.reader = None
         with open(self.dict_file, encoding="utf-8") as df:
-            self.reader = csv.DictReader(df)
+            self.reader = list(csv.DictReader(df))
         logger.info("Successfully read: {}".format(self.dict_file))
 
 
@@ -103,19 +105,19 @@ class RiddlePreset(object):
                 self.preset_args[key] = val
         logger.info("Successfully read: {}".format(self.preset_file))
         logger.info("Preparing words...")
-        self.maindics = [RiddleDictionary(dict_path=d, logger=logger)
-                         for d in self.preset_args["maindics"]]
-        self.subdics = [RiddleDictionary(dict_path=d, logger=logger)
-                        for d in self.preset_args["subdics"]]
+        self.maindicts = [RiddleDictionary(dict_path=d, logger=logger)
+                          for d in self.preset_args["maindicts"]]
+        self.subdicts = [RiddleDictionary(dict_path=d, logger=logger)
+                         for d in self.preset_args["subdicts"]]
         self.minwordlen = self.preset_args["minwordlen"]
         self.maxwordlen = self.preset_args["maxwordlen"]
         self.problem_words = []
-        for maindic in self.maindics:
+        for maindic in self.maindicts:
             for row in maindic.reader:
                 sorted_word = row["sorted_word"]
                 self.problem_words.append(sorted_word)
         self.problem2answer = collections.defaultdict(set)
-        for dic in itertools.chain(self.maindics, self.subdics):
+        for dic in itertools.chain(self.maindicts, self.subdicts):
             for row in dic.reader:
                 orig_word = row["orig_word"]
                 sorted_word = row["sorted_word"]
@@ -141,7 +143,10 @@ def interactive_contest(args, logger=DEF_SRG_LOGGER):
     print("* EXIT: to abort the contest")
     idxs = itertools.count(1) if num_problems == 0 else range(
         1, num_problems + 1)
+    aborted = False
     for prob_idx in idxs:
+        if aborted:
+            break
         hint_used = False
         print()
         tot = str(num_problems) if num_problems > 0 else "inf"
@@ -170,6 +175,7 @@ def interactive_contest(args, logger=DEF_SRG_LOGGER):
                     hint_used = True
             elif ans == "EXIT":
                 print("You aborted the contest.")
+                aborted = True
                 break
             else:
                 judge, ws = prob.judge_answer(ans, logger=logger)
@@ -184,13 +190,13 @@ def interactive_contest(args, logger=DEF_SRG_LOGGER):
                     break
                 else:
                     print("Wrong answer. Try again.")
-        print()
-        print("[Summary]")
-        print("Correct (without hints): {}".format(res["correct_nohint"]))
-        print("Correct (with hints): {}".format(res["correct_hint"]))
-        print("Gave up: {}".format(res["giveup"]))
-        print()
-        print("Bye! :)")
+    print()
+    print("[Summary]")
+    print("Correct (without hints): {}".format(res["correct_nohint"]))
+    print("Correct (with hints): {}".format(res["correct_hint"]))
+    print("Gave up: {}".format(res["giveup"]))
+    print()
+    print("Bye! :)")
 
 
 def main():
