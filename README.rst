@@ -87,7 +87,7 @@ ejdic-hand 系プリセット
 パブリックドメインの英和辞典 `ejdic-hand <https://kujirahand.com/web-tools/EJDictFreeDL.php>`_ から，
 英単語とそれを整列したものを抜き出して作ったソートなぞなぞ用辞書です．
 このソートなぞなぞ用辞書は ``dictionaries/english/`` 内にあり，単語の利用頻度の高いものから，
-``ejdic-hand_level2.csv``（650 語），``ejdic-hand_level1.csv``（1434 語），``ejdic-hand_level0.csv`` （32944 語）となっています．
+``ejdic-hand_level2.csv`` （650 語）， ``ejdic-hand_level1.csv`` （1434 語）， ``ejdic-hand_level0.csv``  （32944 語）となっています．
 これらのソートなぞなぞ用辞書を用いたプリセットは以下の通りです．
 
 * ``ejdic-hand-level2.json``: 既定のプリセット ``default.json`` と，同一の辞書たちを用います．``ejdic-hand-level2`` を主辞書に，残りの二つを副辞書に用います．
