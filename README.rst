@@ -68,7 +68,7 @@ SortingRiddleGenerator: ソートなぞなぞの出題
 プリセット名は，辞書プリセットのファイル名 ``*.json`` です．
 使用できるプリセットの例は後述の通りです．
 
-たとえば，``python sortridgen.py contest --preset ejdic-hand-level1.json`` を実行すると，
+たとえば，``python sortridgen.py contest --preset ejdic-hand-medium.json`` を実行すると，
 やや難しめの英単語を出題範囲とすることができます．
 
 使用できるソートなぞなぞ用辞書と辞書プリセットの例
