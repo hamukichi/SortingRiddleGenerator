@@ -1,4 +1,9 @@
 {
-    "maindicts": [":dictionaries:/english/ejdic-hand_level2.csv"],
-    "subdicts": [":dictionaries:/english/ejdic-hand_level1.csv", ":dictionaries:/english/ejdic-hand_level0.csv"] 
+    "maindicts": [
+        "/english/ejdic-hand_level2.csv"
+    ],
+    "subdicts": [
+        "/english/ejdic-hand_level1.csv",
+        "/english/ejdic-hand_level0.csv"
+    ]
 }
