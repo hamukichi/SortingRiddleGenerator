@@ -115,13 +115,15 @@ class RiddlePreset(object):
         for maindic in self.maindicts:
             for row in maindic.reader:
                 sorted_word = row["sorted_word"]
-                self.problem_words.append(sorted_word)
+                if self.minwordlen <= len(sorted_word) <= self.maxwordlen:
+                    self.problem_words.append(sorted_word)
         self.problem2answer = collections.defaultdict(set)
         for dic in itertools.chain(self.maindicts, self.subdicts):
             for row in dic.reader:
                 orig_word = row["orig_word"]
                 sorted_word = row["sorted_word"]
-                self.problem2answer[sorted_word].add(orig_word)
+                if self.minwordlen <= len(sorted_word) <= self.maxwordlen:
+                    self.problem2answer[sorted_word].add(orig_word)
         logger.info("Completed. # of the problems: {}".format(
             len(self.problem_words)))
 
