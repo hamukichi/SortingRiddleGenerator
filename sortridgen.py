@@ -40,7 +40,7 @@ def locate_file(path, default_directory, logger=DEF_SRG_LOGGER):
         logger.info("The file exists: {}".format(res))
         return res
     else:
-        logger.info("Seaching the default directory: {}".format(
+        logger.debug("Seaching the default directory: {}".format(
             default_directory))
         path_cand = os.path.join(default_directory, path)
         if os.path.exists(path_cand):
@@ -122,8 +122,8 @@ class RiddlePreset(object):
                 orig_word = row["orig_word"]
                 sorted_word = row["sorted_word"]
                 self.problem2answer[sorted_word].add(orig_word)
-        logger.info("Completed.")
-        logger.info("# of the problems: {}".format(len(self.problem_words)))
+        logger.info("Completed. # of the problems: {}".format(
+            len(self.problem_words)))
 
     def generate_problem(self, logger=DEF_SRG_LOGGER):
         prob_word = random.choice(self.problem_words)
@@ -132,6 +132,7 @@ class RiddlePreset(object):
 
 
 def interactive_contest(args, logger=DEF_SRG_LOGGER):
+    logger.info("Starts the contest.")
     preset = args.preset
     num_problems = args.num
     preset = RiddlePreset(preset, logger=logger)
@@ -200,6 +201,7 @@ def interactive_contest(args, logger=DEF_SRG_LOGGER):
 
 
 def main():
+    # logging
     logger = DEF_SRG_LOGGER
     logger.setLevel(logging.DEBUG)
     console_handler = logging.StreamHandler()
@@ -208,6 +210,7 @@ def main():
         "%(levelname)s: %(name)s - %(message)s")
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
+    # arguments
     parser = argparse.ArgumentParser(
         description="Generating sorting riddles",
         epilog="See '%(prog)s <mode> --help' for details.")
