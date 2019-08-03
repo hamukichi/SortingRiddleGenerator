@@ -216,7 +216,7 @@ def main():
         epilog="See '%(prog)s <mode> --help' for details.")
     parser.add_argument("--version", action="version",
                         version="%(progs) " + __version__)
-    parser.add_argument("--verbose", "-v", action="count")
+    parser.add_argument("--verbose", "-v", action="count", default=0)
     subparsers = parser.add_subparsers(
         help="Available modes.",
         dest="contest")
