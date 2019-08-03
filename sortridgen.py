@@ -10,6 +10,7 @@ __date__ = "2019-08-03"
 __license__ = "MIT License"
 
 
+import argparse
 import collections
 import csv
 import itertools
@@ -128,8 +129,8 @@ class RiddlePreset(object):
         return RiddleProblem(prob_word, ans_words, logger=logger)
 
 
-def interactive_contest(preset_path, num_problems=0, logger=DEF_SRG_LOGGER):
-    preset = RiddlePreset(preset_path, logger=logger)
+def interactive_contest(preset, num_problems=0, logger=DEF_SRG_LOGGER):
+    preset = RiddlePreset(preset, logger=logger)
     res = {"correct_nohint": 0, "correct_hint": 0, "giveup": 0}
     print("Input your answer for each problem, or")
     print("input one of the following commands:")
@@ -189,3 +190,35 @@ def interactive_contest(preset_path, num_problems=0, logger=DEF_SRG_LOGGER):
         print()
         print("Bye! :)")
 
+
+def main():
+    logger = DEF_SRG_LOGGER
+    logger.setLevel(logging.DEBUG)
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.ERROR)
+    formatter = logging.Formatter(
+        "%(levelname)s: %(name)s - %(message)s")
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+    parser = argparse.ArgumentParser(
+        description="Generating sorting riddles",
+        epilog="See '%(prog)s <mode> --help' for details.")
+    subparsers = parser.add_subparsers(
+        help="Available modes.",
+        dest="contest")
+    parser_contest = subparsers.add_parser("contest",
+                                           help="Let's play!")
+    parser_contest.set_defaults(func=interactive_contest)
+    parser_contest.add_argument("-p", "--preset",
+                                help="the name of " +
+                                     "preset file (*.json)",
+                                default=DEF_PRESET_NAME)
+    args = parser.parse_args()
+    if hasattr(args, "func"):
+        args.func(args)
+    else:
+        parser.print_help()
+
+
+if __name__ == "__main__":
+    main()
