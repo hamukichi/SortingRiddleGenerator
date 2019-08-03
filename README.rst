@@ -5,7 +5,7 @@ SortingRiddleGenerator: ソートなぞなぞの出題
 概要
 ====
 
-英語や日本語などの単語を構成する文字を昇順に整列したものを与え，もとの単語を復元させる言葉遊びを，ソートなぞなぞと呼びます．
+英語や日本語などの単語を構成する文字を昇順に整列したものを与え，もとの単語を復元させる言葉遊びを，ソートなぞなぞと呼びます [#what-is-sr]_ ．
 この Python 製 CUI ツールは，ソートなぞなぞを自動で出題し，答え合わせも行うものです．
 
 機能
@@ -90,9 +90,9 @@ ejdic-hand 系プリセット
 ``ejdic-hand_level2.csv`` （650 語）， ``ejdic-hand_level1.csv`` （1434 語）， ``ejdic-hand_level0.csv``  （32944 語）となっています．
 これらのソートなぞなぞ用辞書を用いたプリセットは以下の通りです．
 
-* ``ejdic-hand-level2.json``: 既定のプリセット ``default.json`` と，同一の辞書たちを用います．``ejdic-hand-level2`` を主辞書に，残りの二つを副辞書に用います．
-* ``ejdic-hand-level1.json``: ``ejdic-hand-level1`` を主辞書に，残りの二つを副辞書に用います．
-* ``ejdic-hand-level0.json``: ``ejdic-hand-level0`` を主辞書に，残りの二つを副辞書に用います．
+* ``ejdic-hand-easy.json``: ``ejdic-hand-level2`` を主辞書に，残りの二つを副辞書に用います．既定のプリセット ``default.json`` と，同一の辞書たちを用います．
+* ``ejdic-hand-medium.json``: ``ejdic-hand-level1`` を主辞書に，残りの二つを副辞書に用います．
+* ``ejdic-hand-hard.json``: ``ejdic-hand-level0`` を主辞書に，残りの二つを副辞書に用います．
 
 自作する
 -------
@@ -108,6 +108,16 @@ ejdic-hand 系プリセット
 更新履歴
 =======
 
-* Version 0.1.0 (2019-08-03): 出す問題数を指定する機能を追加．全面的リファクタリング．
+* Version 0.1.0 (2019-08-03)
+
+  * 出す問題数を指定する機能を追加．
+  * ロギング機能を追加．
+  * 全面的リファクタリング．
 
 * Version 0.0.1 (2019-07-29): 初版．
+
+
+.. rubric:: 注
+
+.. [#what-is-sr] ソートなぞなぞは， `Ti11192916 https://github.com/1119-2916`_ さんをはじめとする，競技プログラマーの方々により広められた言葉遊びです．
+ご自身によるプロジェクト `https://github.com/1119-2916/sort_nazonazo `_ が存在します．これは，Discord 上でソートなぞなぞの出題と答え合わせなどが行える bot です．
