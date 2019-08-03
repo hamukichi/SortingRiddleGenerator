@@ -119,5 +119,4 @@ ejdic-hand 系プリセット
 
 .. rubric:: 注
 
-.. [#what-is-sr] ソートなぞなぞは， `Ti11192916 https://github.com/1119-2916`_ さんをはじめとする，競技プログラマーの方々により広められた言葉遊びです．
-ご自身によるプロジェクト `https://github.com/1119-2916/sort_nazonazo `_ が存在します．これは，Discord 上でソートなぞなぞの出題と答え合わせなどが行える bot です．
+.. [#what-is-sr] ソートなぞなぞは， `Ti11192916 https://github.com/1119-2916`_ さんをはじめとする，競技プログラマーの方々により広められた言葉遊びです．ご自身によるプロジェクト `sort_nazonazo https://github.com/1119-2916/sort_nazonazo`_ が存在します．これは，Discord 上でソートなぞなぞの出題と答え合わせなどが行える bot です．当 SortingRiddleGenerator は，これを受けて，手元の端末でソートなぞなぞの練習をするツールとして開発しているものです．
