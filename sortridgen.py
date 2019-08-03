@@ -11,7 +11,11 @@ __license__ = "MIT License"
 
 
 import logging
+import os
 
 
+DEF_DICT_DIR = os.path.join(os.path.dirname(__file__), "dictionaries")
+DEF_PRESET_DIR = os.path.join(os.path.dirname(__file__), "presets")
+DEF_PRESET_NAME = "default.json"
 DEF_SRG_LOGGER = logging.getLogger(__name__)
 DEF_SRG_LOGGER.addHandler(logging.NullHandler())
