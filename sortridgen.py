@@ -10,6 +10,7 @@ __date__ = "2019-08-03"
 __license__ = "MIT License"
 
 
+import csv
 import logging
 import os
 
@@ -23,3 +24,9 @@ DEF_SRG_LOGGER.addHandler(logging.NullHandler())
 
 class RiddleGeneratorError(Exception):
     pass
+
+
+class RiddleDictionary(object):
+
+    def __init__(self, logger=DEF_SRG_LOGGER):
+        pass
