@@ -129,4 +129,4 @@ sort_nazonazo
 
 `Ti11192916 <https://github.com/1119-2916>`_ さんによる  `sort_nazonazo <https://github.com/1119-2916/sort_nazonazo>`_ は，
 ソートなぞなぞの出題，答え合わせを Discord 上で行える Bot です．
-SotringRiddleGenerator は，ここから着想を得て，手元の端末でもソートなぞなぞの練習ができるように作成したものです．
+SortingRiddleGenerator は，ここから着想を得て，手元の端末でもソートなぞなぞの練習ができるように作成したものです．
