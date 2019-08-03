@@ -6,6 +6,6 @@
         "english/ejdic-hand_level1.csv",
         "english/ejdic-hand_level0.csv"
     ],
-    "minwordlen": 5,
+    "minwordlen": 6,
     "maxwordlen": 1024
 }
