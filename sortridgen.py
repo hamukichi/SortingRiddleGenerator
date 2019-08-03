@@ -26,6 +26,25 @@ class RiddleGeneratorError(Exception):
     pass
 
 
+def locate_file(path, default_directory, logger=DEF_SRG_LOGGER):
+    if os.path.exists(path):
+        res = os.path.abspath(path)
+        logger.info("The file exists: {}".format(res))
+        return res
+    else:
+        logger.info("Seaching the default directory: {}".format(
+            default_directory))
+        path_cand = os.path.join(default_directory, path)
+        if os.path.exists(path_cand):
+            res = os.path.abspath(path)
+            logger.info("The file exists: {}".format(res))
+            return res
+        else:
+            msg = "Could not find {}".format(path)
+            logger.error(msg)
+            raise RiddleGeneratorError(msg)
+
+
 class RiddleDictionary(object):
 
     def __init__(self, logger=DEF_SRG_LOGGER):
