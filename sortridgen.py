@@ -129,7 +129,9 @@ class RiddlePreset(object):
         return RiddleProblem(prob_word, ans_words, logger=logger)
 
 
-def interactive_contest(preset, num_problems=0, logger=DEF_SRG_LOGGER):
+def interactive_contest(args, logger=DEF_SRG_LOGGER):
+    preset = args.preset
+    num_problems = args.num
     preset = RiddlePreset(preset, logger=logger)
     res = {"correct_nohint": 0, "correct_hint": 0, "giveup": 0}
     print("Input your answer for each problem, or")
@@ -213,6 +215,12 @@ def main():
                                 help="the name of " +
                                      "preset file (*.json)",
                                 default=DEF_PRESET_NAME)
+    parser_contest.add_argument("-n", "--num",
+                                help="the number of problems. " +
+                                     "< 1 means infinity",
+                                default=0,
+                                type=int
+                                )
     args = parser.parse_args()
     if hasattr(args, "func"):
         args.func(args)
