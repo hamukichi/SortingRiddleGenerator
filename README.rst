@@ -124,7 +124,7 @@ ejdic-hand 系プリセット
 関連するプロジェクト
 ==================
 
-sort-nazonazo
+sort_nazonazo
 -------------
 
 `Ti11192916 <https://github.com/1119-2916>`_ さんによる  `sort_nazonazo <https://github.com/1119-2916/sort_nazonazo>`_ は，
