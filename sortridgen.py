@@ -49,6 +49,31 @@ def locate_file(path, default_directory, logger=DEF_SRG_LOGGER):
             raise RiddleGeneratorError(msg)
 
 
+class RiddleProblem(object):
+
+    def __init__(self, problem, answers, logger=DEF_SRG_LOGGER):
+        self.problem = problem
+        self.answers = answers
+
+    def judge_answer(self, prop_answer, logger=DEF_SRG_LOGGER):
+        if prop_answer in self.answers:
+            other_answers = {a for a in self.answers if a != prop_answer}
+            return True, other_answers
+        else:
+            return False, set()
+
+    def generate_hints(self, num_characters, logger=DEF_SRG_LOGGER):
+        total_len = len(self.problem)
+        if not isinstance(num_characters, int):
+            raise RiddleGeneratorError("# of characters must be an integer")
+        elif 0 < num_characters < total_len - 1:
+            rest_num = total_len - num_characters
+            hints = [a[:num_characters] + "?" * rest_num for a in self.answers]
+            return hints
+        else:
+            raise RiddleGeneratorError("# of characters is out of range")
+
+
 class RiddleDictionary(object):
 
     def __init__(self, dict_path, dict_dir=DEF_DICT_DIR,
@@ -83,11 +108,11 @@ class RiddlePreset(object):
                         for d in self.preset_args["subdics"]]
         self.minwordlen = self.preset_args["minwordlen"]
         self.maxwordlen = self.preset_args["maxwordlen"]
-        self.problem_words = set()
+        self.problem_words = []
         for maindic in self.maindics:
             for row in maindic.reader:
                 sorted_word = row["sorted_word"]
-                self.problem_words.add(sorted_word)
+                self.problem_words.append(sorted_word)
         self.problem2answer = collections.defaultdict(set)
         for dic in itertools.chain(self.maindics, self.subdics):
             for row in dic.reader:
@@ -96,3 +121,71 @@ class RiddlePreset(object):
                 self.problem2answer[sorted_word].add(orig_word)
         logger.info("Completed.")
         logger.info("# of the problems: {}".format(len(self.problem_words)))
+
+    def generate_problem(self, logger=DEF_SRG_LOGGER):
+        prob_word = random.choice(self.problem_words)
+        ans_words = self.problem2answer[prob_word]
+        return RiddleProblem(prob_word, ans_words, logger=logger)
+
+
+def interactive_contest(preset_path, num_problems=0, logger=DEF_SRG_LOGGER):
+    preset = RiddlePreset(preset_path, logger=logger)
+    res = {"correct_nohint": 0, "correct_hint": 0, "giveup": 0}
+    print("Input your answer for each problem, or")
+    print("input one of the following commands:")
+    print("* HINT [NUM]: to obtain a hint for the current problem")
+    print("* GIVEUP: to give up the current problem")
+    print("* EXIT: to abort the contest")
+    idxs = itertools.count(1) if num_problems == 0 else range(
+        1, num_problems + 1)
+    for prob_idx in idxs:
+        hint_used = False
+        print()
+        tot = str(num_problems) if num_problems > 0 else "inf"
+        print("[Question {cur}/{tot}]".format(cur=prob_idx,
+                                              tot=tot))
+        prob = preset.generate_problem(logger=logger)
+        print("{}".format(prob.problem))
+        while True:
+            ans = input(">>> ")
+            if ans == "GIVEUP":
+                res["giveup"] += 1
+                print("You gave up the problem. :(")
+                print("The answer(s): ", end="")
+                print(", ".join(prob.answers))
+                break
+            elif ans.startswith("HINT"):
+                try:
+                    _, n0 = ans.split()
+                    n = int(n0)
+                    hints = prob.generate_hints(n, logger=logger)
+                except Exception:
+                    print("Error. Check the format and retry.")
+                else:
+                    print("The hint(s): ", end="")
+                    print(", ".join(hints))
+                    hint_used = True
+            elif ans == "EXIT":
+                print("You aborted the contest.")
+                break
+            else:
+                judge, ws = prob.judge_answer(ans, logger=logger)
+                if judge:
+                    print("Your answer '{}' is correct! :)".format(ans))
+                    print("Other possible answer(s): ", end="")
+                    print(", ".join(ws) if ws else "(None)")
+                    if hint_used:
+                        res["correct_hint"] += 1
+                    else:
+                        res["correct_nohint"] += 1
+                    break
+                else:
+                    print("Wrong answer. Try again.")
+        print()
+        print("[Summary]")
+        print("Correct (without hints): {}".format(res["correct_nohint"]))
+        print("Correct (with hints): {}".format(res["correct_hint"]))
+        print("Gave up: {}".format(res["giveup"]))
+        print()
+        print("Bye! :)")
+
