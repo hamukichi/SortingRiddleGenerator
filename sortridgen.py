@@ -205,7 +205,7 @@ def main():
     logger = DEF_SRG_LOGGER
     logger.setLevel(logging.DEBUG)
     console_handler = logging.StreamHandler()
-    console_handler.setLevel(logging.ERROR)
+    console_handler.setLevel(logging.WARNING)
     formatter = logging.Formatter(
         "%(levelname)s: %(name)s - %(message)s")
     console_handler.setFormatter(formatter)
@@ -216,6 +216,7 @@ def main():
         epilog="See '%(prog)s <mode> --help' for details.")
     parser.add_argument("--version", action="version",
                         version="%(progs) " + __version__)
+    parser.add_argument("--verbose", "-v", action="count")
     subparsers = parser.add_subparsers(
         help="Available modes.",
         dest="contest")
@@ -233,6 +234,10 @@ def main():
                                 type=int
                                 )
     args = parser.parse_args()
+    if args.verbose == 1:
+        console_handler.setLevel(logging.INFO)
+    elif args.verbose >= 2:
+        console_handler.setLevel(logging.DEBUG)
     if hasattr(args, "func"):
         args.func(args)
     else:
