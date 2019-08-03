@@ -47,5 +47,10 @@ def locate_file(path, default_directory, logger=DEF_SRG_LOGGER):
 
 class RiddleDictionary(object):
 
-    def __init__(self, logger=DEF_SRG_LOGGER):
-        pass
+    def __init__(self, dict_path, logger=DEF_SRG_LOGGER):
+        self.dict_file = locate_file(dict_path, DEF_DICT_DIR, logger=logger)
+        self.dict_name = os.path.basename(self.dict_file)
+        self.reader = None
+        with open(self.dict_file, encoding="utf-8") as df:
+            self.reader = csv.DictReader(df)
+        logger.info("Successfully read: {}".format(self.dict_file))
