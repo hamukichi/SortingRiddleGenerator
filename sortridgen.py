@@ -214,6 +214,8 @@ def main():
     parser = argparse.ArgumentParser(
         description="Generating sorting riddles",
         epilog="See '%(prog)s <mode> --help' for details.")
+    parser.add_argument("--version", action="version",
+                        version="%(progs) " + __version__)
     subparsers = parser.add_subparsers(
         help="Available modes.",
         dest="contest")
