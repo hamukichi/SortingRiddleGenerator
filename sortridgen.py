@@ -5,8 +5,8 @@
 """
 
 __author__ = "Hamukichi (Nombiri)"
-__version__ = "0.1.0"
-__date__ = "2019-08-03"
+__version__ = "0.2.0-alpha"
+__date__ = "2019-08-04"
 __license__ = "MIT License"
 
 
