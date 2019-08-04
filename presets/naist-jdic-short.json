@@ -1,7 +1,0 @@
-{
-    "maindicts": [
-        "japanese/naist-jdic-common-nouns.csv"
-    ],
-    "minwordlen": 5,
-    "maxwordlen": 9
-}
