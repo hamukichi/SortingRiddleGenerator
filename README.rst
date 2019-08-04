@@ -147,6 +147,12 @@ NAIST Japanese Dictionary
 更新履歴
 =======
 
+* Version 0.2.0 (2019-08-04)
+
+  * NAIST Japanese Dictionary 由来の日本語ソートなぞなぞ辞書および辞書プリセットを追加．
+  * 外部の辞書データをソートなぞなぞ辞書に変換する機能を追加．現状では NAIST Japanese Dictionary のみに対応．
+  * ライセンスを 3 条項 BSD ライセンスに変更．
+
 * Version 0.1.0 (2019-08-03)
 
   * 全面的リファクタリング．
