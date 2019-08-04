@@ -231,6 +231,12 @@ def _interactive_contest(args, logger=DEF_SRG_LOGGER):
     print("Bye! :)")
 
 
+def _converter(args, logger=DEF_SRG_LOGGER):
+    conv_from_foreign_dic(in_path=args.in_path, out_path=args.out_path,
+                          format=args.format, in_enc=args.encoding,
+                          logger=logger)
+
+
 def main():
     # logging
     logger = DEF_SRG_LOGGER
@@ -241,7 +247,7 @@ def main():
         "%(levelname)s: %(name)s - %(message)s")
     console_handler.setFormatter(formatter)
     logger.addHandler(console_handler)
-    # arguments
+    # arguments (general)
     parser = argparse.ArgumentParser(
         description="Generating sorting riddles",
         epilog="See '%(prog)s <mode> --help' for details.")
@@ -250,9 +256,10 @@ def main():
     parser.add_argument("--verbose", "-v", action="count", default=0)
     subparsers = parser.add_subparsers(
         help="Available modes.",
-        dest="contest")
+        dest="mode")
+    # arguments (contest)
     parser_contest = subparsers.add_parser("contest",
-                                           help="Let's play!")
+                                           help="to start a contest")
     parser_contest.set_defaults(func=_interactive_contest)
     parser_contest.add_argument("-p", "--preset",
                                 help="the name of " +
@@ -264,6 +271,19 @@ def main():
                                 default=0,
                                 type=int
                                 )
+    # arguments (convert)
+    parser_convert = subparsers.add_parser("convert",
+                                           help="to convert dictionaries")
+    parser_convert.set_defaults(func=_converter)
+    parser_convert.add_argument("format",
+                                help="the format of the input file",
+                                choices=ACCEPTABLE_FOREIGN_FORMATS)
+    parser_convert.add_argument("in_path",
+                                help="the path to the input file")
+    parser_convert.add_argument("out_path",
+                                help="the path to the output file")
+    parser_convert.add_argument("-e", "--encoding",
+                                help="the encoding of the input file")
     args = parser.parse_args()
     if args.verbose == 1:
         console_handler.setLevel(logging.INFO)
