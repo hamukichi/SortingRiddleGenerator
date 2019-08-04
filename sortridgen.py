@@ -133,7 +133,7 @@ class RiddlePreset(object):
         return RiddleProblem(prob_word, ans_words, logger=logger)
 
 
-def interactive_contest(args, logger=DEF_SRG_LOGGER):
+def _interactive_contest(args, logger=DEF_SRG_LOGGER):
     logger.info("Starts the contest.")
     preset = args.preset
     num_problems = args.num
@@ -224,7 +224,7 @@ def main():
         dest="contest")
     parser_contest = subparsers.add_parser("contest",
                                            help="Let's play!")
-    parser_contest.set_defaults(func=interactive_contest)
+    parser_contest.set_defaults(func=_interactive_contest)
     parser_contest.add_argument("-p", "--preset",
                                 help="the name of " +
                                      "preset file (*.json)",
