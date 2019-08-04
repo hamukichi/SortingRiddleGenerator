@@ -45,13 +45,15 @@ def conv_from_foreign_dic(in_path, out_path, format, in_enc=None,
     if format == "mecab-naist-jdic":
         if in_enc is None:
             in_enc = "euc-jp"
-        with open(in_path,
+        with open(in_path, newline="",
                   encoding=in_enc) as in_csv, open(out_path,
+                                                   newline="",
                                                    encoding="utf-8",
                                                    mode="w") as out_csv:
             in_reader = csv.reader(in_csv)
             out_writer = csv.DictWriter(
                 out_csv, fieldnames=["orig_word", "sorted_word"])
+            out_writer.writeheader()
             for row in in_reader:
                 is_match = word_ptn.fullmatch(row[11])
                 if row[4] == "名詞" and row[5] == "一般" and is_match:
