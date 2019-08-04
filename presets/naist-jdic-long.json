@@ -1,0 +1,7 @@
+{
+    "maindicts": [
+        "naist-jdic-common-nouns.csv"
+    ],
+    "minwordlen": 20,
+    "maxwordlen": 1024
+}
