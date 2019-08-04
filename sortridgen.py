@@ -19,18 +19,47 @@ import logging
 import os
 import pathlib
 import random
+import re
 
 
+ACCEPTABLE_FOREIGN_FORMATS = ["mecab-naist-jdic"]
 PROG_ROOT_DIR = pathlib.Path(__file__).parent.resolve()
 DEF_DICT_DIR = os.path.join(PROG_ROOT_DIR, "dictionaries")
 DEF_PRESET_DIR = os.path.join(PROG_ROOT_DIR, "presets")
 DEF_PRESET_NAME = "default.json"
 DEF_SRG_LOGGER = logging.getLogger(__name__)
 DEF_SRG_LOGGER.addHandler(logging.NullHandler())
+DEF_WORD_PTN = re.compile(r"[a-zあ-んア-ン]*")
 
 
 class RiddleGeneratorError(Exception):
     pass
+
+
+def conv_from_foreign_dic(in_path, out_path, format, in_enc=None,
+                          word_ptn=DEF_WORD_PTN, logger=DEF_SRG_LOGGER):
+    if format not in ACCEPTABLE_FOREIGN_FORMATS:
+        raise RiddleGeneratorError(
+            "The format {} cannot be accepted.".format(format))
+    logger.info("Reads " + in_path + " (format = " + format + ")")
+    if format == "mecab-naist-jdic":
+        if in_enc is None:
+            in_enc = "euc-jp"
+        with open(in_path,
+                  encoding=in_enc) as in_csv, open(out_path,
+                                                   encoding="utf-8",
+                                                   mode="w") as out_csv:
+            in_reader = csv.reader(in_csv)
+            out_writer = csv.DictWriter(
+                out_csv, fieldnames=["orig_word", "sorted_word"])
+            for row in in_reader:
+                is_match = word_ptn.fullmatch(row[11])
+                if row[4] == "名詞" and row[5] == "一般" and is_match:
+                    orig_word = row[11]
+                    sorted_word = "".join(sorted(orig_word))
+                    out_writer.writerow({"orig_word": orig_word,
+                                         "sorted_word": sorted_word})
+        logger.info("Successfully generated " + out_path)
 
 
 def locate_file(path, default_directory, logger=DEF_SRG_LOGGER):
