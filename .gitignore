@@ -127,3 +127,4 @@ dmypy.json
 
 # Extra Dictionaries
 dictionaries/nonfree
+presets/nonfree
