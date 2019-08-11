@@ -22,7 +22,7 @@ import random
 import re
 
 
-ACCEPTABLE_FOREIGN_INPUT_FORMATS = ["mecab-naist-jdic"]
+ACCEPTABLE_FOREIGN_INPUT_FORMATS = ["mecab-naist-jdic", "sort_nazonazo"]
 PROG_ROOT_DIR = pathlib.Path(__file__).parent.resolve()
 DEF_DICT_DIR = os.path.join(PROG_ROOT_DIR, "dictionaries")
 DEF_PRESET_DIR = os.path.join(PROG_ROOT_DIR, "presets")
@@ -61,7 +61,26 @@ def conv_from_foreign_dic(in_path, out_path, format, in_enc=None,
                     sorted_word = "".join(sorted(orig_word))
                     out_writer.writerow({"orig_word": orig_word,
                                          "sorted_word": sorted_word})
-        logger.info("Successfully generated " + out_path)
+    elif format == "sort_nazonazo":
+        if in_enc is None:
+            in_enc = "utf-8"
+        with open(in_path, newline="",
+                  encoding=in_enc) as in_dic, open(out_path,
+                                                   newline="",
+                                                   encoding="utf-8",
+                                                   mode="w") as out_csv:
+            out_writer = csv.DictWriter(
+                out_csv, fieldnames=["orig_word", "sorted_word"])
+            out_writer.writeheader()
+            for line in in_dic:
+                try:
+                    orig_word, sorted_word = line.rstrip("\n").split()
+                except Exception:
+                    continue
+                else:
+                    out_writer.writerow({"orig_word": orig_word,
+                                         "sorted_word": sorted_word})
+    logger.info("Successfully generated " + out_path)
 
 
 def locate_file(path, default_directory, logger=DEF_SRG_LOGGER):
@@ -275,7 +294,8 @@ def main():
                                 )
     # arguments (convert)
     parser_convert = subparsers.add_parser("convert",
-                                           help="to generate a dictionary (*.csv) from a file with other format")
+                                           help="to generate a dictionary " +
+                                           "(*.csv) from a foreign file")
     parser_convert.set_defaults(func=_converter)
     parser_convert.add_argument("format",
                                 help="the format of the input file",
@@ -283,7 +303,7 @@ def main():
     parser_convert.add_argument("in_path",
                                 help="the path to the input file")
     parser_convert.add_argument("out_path",
-                                help="the path to the output dictionary file (*.csv)")
+                                help="the path to the output (*.csv)")
     parser_convert.add_argument("-e", "--encoding",
                                 help="the encoding of the input file")
     # parse
