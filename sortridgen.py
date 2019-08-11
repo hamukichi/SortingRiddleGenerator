@@ -275,7 +275,7 @@ def main():
                                 )
     # arguments (convert)
     parser_convert = subparsers.add_parser("convert",
-                                           help="to convert dictionaries")
+                                           help="to generate a dictionary (*.csv) from a file with other format")
     parser_convert.set_defaults(func=_converter)
     parser_convert.add_argument("format",
                                 help="the format of the input file",
@@ -283,9 +283,10 @@ def main():
     parser_convert.add_argument("in_path",
                                 help="the path to the input file")
     parser_convert.add_argument("out_path",
-                                help="the path to the output file")
+                                help="the path to the output dictionary file (*.csv)")
     parser_convert.add_argument("-e", "--encoding",
                                 help="the encoding of the input file")
+    # parse
     args = parser.parse_args()
     if args.verbose == 1:
         console_handler.setLevel(logging.INFO)
