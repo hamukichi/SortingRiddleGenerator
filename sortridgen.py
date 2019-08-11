@@ -5,7 +5,7 @@
 """
 
 __author__ = "Hamukichi (Nombiri)"
-__version__ = "0.2.0"
+__version__ = "0.3.0-alpha"
 __date__ = "2019-08-04"
 __license__ = "MIT License"
 
@@ -22,7 +22,7 @@ import random
 import re
 
 
-ACCEPTABLE_FOREIGN_FORMATS = ["mecab-naist-jdic"]
+ACCEPTABLE_FOREIGN_INPUT_FORMATS = ["mecab-naist-jdic"]
 PROG_ROOT_DIR = pathlib.Path(__file__).parent.resolve()
 DEF_DICT_DIR = os.path.join(PROG_ROOT_DIR, "dictionaries")
 DEF_PRESET_DIR = os.path.join(PROG_ROOT_DIR, "presets")
@@ -38,7 +38,7 @@ class RiddleGeneratorError(Exception):
 
 def conv_from_foreign_dic(in_path, out_path, format, in_enc=None,
                           word_ptn=DEF_WORD_PTN, logger=DEF_SRG_LOGGER):
-    if format not in ACCEPTABLE_FOREIGN_FORMATS:
+    if format not in ACCEPTABLE_FOREIGN_INPUT_FORMATS:
         raise RiddleGeneratorError(
             "The format {} cannot be accepted.".format(format))
     logger.info("Reads " + in_path + " (format = " + format + ")")
@@ -279,7 +279,7 @@ def main():
     parser_convert.set_defaults(func=_converter)
     parser_convert.add_argument("format",
                                 help="the format of the input file",
-                                choices=ACCEPTABLE_FOREIGN_FORMATS)
+                                choices=ACCEPTABLE_FOREIGN_INPUT_FORMATS)
     parser_convert.add_argument("in_path",
                                 help="the path to the input file")
     parser_convert.add_argument("out_path",
