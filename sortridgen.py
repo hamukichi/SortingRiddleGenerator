@@ -55,7 +55,7 @@ def conv_to_foreign_dic(in_path, out_path, format, out_enc=None,
             for row in in_reader:
                 orig_word = row["orig_word"]
                 sorted_word = row["sorted_word"]
-                if min_word_len <= orig_word <= max_word_len:
+                if min_word_len <= len(orig_word) <= max_word_len:
                     print(orig_word, sorted_word, file=out_f)
     logger.info("Successfully generated " + out_path)
 
