@@ -37,6 +37,29 @@ class RiddleGeneratorError(Exception):
     pass
 
 
+def conv_to_foreign_dic(in_path, out_path, format, out_enc=None,
+                        min_word_len=1, max_word_len=1024,
+                        logger=DEF_SRG_LOGGER):
+    if format not in ACCEPTABLE_FOREIGN_OUTPUT_FORMATS:
+        raise RiddleGeneratorError(
+            "The format {} cannot be accepted.".format(format))
+        logger.info("Reads " + in_path + " (format = CSV)")
+        if format == "sort_nazonazo":
+            if out_enc is None:
+                out_enc = "utf-8"
+            with open(in_path, newline="",
+                      encoding="utf-8") as in_csv, open(out_path,
+                                                        encoding=out_enc,
+                                                        mode="w") as out_f:
+                in_reader = csv.DictReader(in_csv)
+                for row in in_reader:
+                    orig_word = row["orig_word"]
+                    sorted_word = row["sorted_word"]
+                    if min_word_len <= orig_word <= max_word_len:
+                        print(orig_word, sorted_word, file=out_f)
+    logger.info("Successfully generated " + out_path)
+
+
 def conv_from_foreign_dic(in_path, out_path, format, in_enc=None,
                           word_ptn=DEF_WORD_PTN, logger=DEF_SRG_LOGGER):
     if format not in ACCEPTABLE_FOREIGN_INPUT_FORMATS:
