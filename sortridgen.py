@@ -231,7 +231,8 @@ class RiddlePreset(object):
         for _ in range(num_merge):
             cur_prob_words.append(random.choice(self.problem_words))
         prob_phrase = "".join(sorted("".join(cur_prob_words)))
-        ans_words = [self.problem2answer[w] for w in cur_prob_words]
+        ans_words = [random.choice(list(self.problem2answer[w])) for w in
+                     cur_prob_words]
         return MergeRiddleProblem(prob_phrase, self.all_orignal_words,
                                   ans_words=ans_words, logger=logger)
 
