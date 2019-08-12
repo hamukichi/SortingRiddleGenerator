@@ -169,7 +169,7 @@ class MergeRiddleProblem(object):
         max_len = max(len(w) for w in self.ans_words)
         if not isinstance(num_characters, int):
             raise RiddleGeneratorError("# of characters must be an integer")
-        elif 0 < num_characters < max_len - 1:
+        elif 0 < num_characters < max_len:
             hints = (w[:num_characters] for w in self.ans_words)
             return hints
         else:
