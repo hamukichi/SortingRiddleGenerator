@@ -227,10 +227,11 @@ class RiddlePreset(object):
         return RiddleProblem(prob_word, ans_words, logger=logger)
 
     def generate_merge_problem(self, num_merge=2, logger=DEF_SRG_LOGGER):
-        ans_words = []
+        cur_prob_words = []
         for _ in range(num_merge):
-            ans_words.append(random.choice(self.problem_words))
-        prob_phrase = "".join(sorted("".join(ans_words)))
+            cur_prob_words.append(random.choice(self.problem_words))
+        prob_phrase = "".join(sorted("".join(cur_prob_words)))
+        ans_words = [self.problem2answer[w] for w in cur_prob_words]
         return MergeRiddleProblem(prob_phrase, self.all_orignal_words,
                                   ans_words=ans_words, logger=logger)
 
