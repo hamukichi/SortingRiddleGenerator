@@ -315,13 +315,13 @@ def _interactive_contest(args, logger=DEF_SRG_LOGGER):
                     judge, ws = prob.judge_answer(ans, logger=logger)
                 else:
                     ans_words = None
-                    for sep in ACCEPTABLE_SEPARATORS:
-                        try:
-                            ans_words = ans.split(sep)
-                        except Exception:
-                            continue
+                    ans_words_cands = [ans.split(sep) for sep in
+                                       ACCEPTABLE_SEPARATORS]
+                    for cand in ans_words_cands:
+                        if len(cand) == num_merge:
+                            ans_words = ans_words_cands[:]
                         else:
-                            break
+                            continue
                     if ans_words is None:
                         print("Syntax Error. Use appropriate separators.")
                         continue
