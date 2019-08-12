@@ -285,6 +285,7 @@ def _interactive_contest(args, logger=DEF_SRG_LOGGER):
             elif ans.startswith("HINT"):
                 if num_merge > 1:
                     print("Hints are not avaiable when playing merge riddles.")
+                    continue
                 try:
                     _, n0 = ans.split()
                     n = int(n0)
