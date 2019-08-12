@@ -282,6 +282,13 @@ def _converter(args, logger=DEF_SRG_LOGGER):
                           logger=logger)
 
 
+def _inv_converter(args, logger=DEF_SRG_LOGGER):
+    conv_to_foreign_dic(in_path=args.in_path, out_path=args.out_path,
+                        format=args.format, out_enc=args.encoding,
+                        min_word_len=args.mi, max_word_len=args.ma,
+                        logger=logger)
+
+
 def main():
     # logging
     logger = DEF_SRG_LOGGER
