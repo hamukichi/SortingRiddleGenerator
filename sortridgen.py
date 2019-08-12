@@ -151,6 +151,21 @@ class RiddleProblem(object):
             raise RiddleGeneratorError("# of characters is out of range")
 
 
+class MergeRiddleProblem(object):
+
+    def __init__(self, problem, orignal_words, logger=DEF_SRG_LOGGER):
+        self.problem = problem
+        self.orignal_words = orignal_words
+
+    def judge_answer(self, prop_ans_words, logger=DEF_SRG_LOGGER):
+        prop_sorted = "".join(sorted("".join(prop_ans_words)))
+        return prop_sorted == self.problem and all(w in self.orignal_words
+                                                   for w in prop_ans_words)
+
+    def generate_hints(self, logger=DEF_SRG_LOGGER):
+        raise NotImplementedError()
+
+
 class RiddleDictionary(object):
 
     def __init__(self, dict_path, dict_dir=DEF_DICT_DIR,
