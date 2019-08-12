@@ -31,6 +31,7 @@ DEF_PRESET_NAME = "default.json"
 DEF_SRG_LOGGER = logging.getLogger(__name__)
 DEF_SRG_LOGGER.addHandler(logging.NullHandler())
 DEF_WORD_PTN = re.compile(r"[a-zあ-んア-ン]*")
+ACCEPTABLE_SEPARATORS = [",", "，", "、"]
 
 
 class RiddleGeneratorError(Exception):
@@ -153,9 +154,11 @@ class RiddleProblem(object):
 
 class MergeRiddleProblem(object):
 
-    def __init__(self, problem, orignal_words, logger=DEF_SRG_LOGGER):
+    def __init__(self, problem, orignal_words, ans_words,
+                 logger=DEF_SRG_LOGGER):
         self.problem = problem
         self.orignal_words = orignal_words
+        self.ans_words = ans_words
 
     def judge_answer(self, prop_ans_words, logger=DEF_SRG_LOGGER):
         prop_sorted = "".join(sorted("".join(prop_ans_words)))
@@ -223,16 +226,26 @@ class RiddlePreset(object):
         ans_words = self.problem2answer[prob_word]
         return RiddleProblem(prob_word, ans_words, logger=logger)
 
+    def generate_merge_problem(self, num_merge=2, logger=DEF_SRG_LOGGER):
+        ans_words = []
+        for _ in range(num_merge):
+            ans_words.append(random.choice(self.problem_words))
+        prob_phrase = "".join(sorted("".join(ans_words)))
+        return MergeRiddleProblem(prob_phrase, self.all_orignal_words,
+                                  ans_words=ans_words, logger=logger)
+
 
 def _interactive_contest(args, logger=DEF_SRG_LOGGER):
     logger.info("Starts the contest.")
     preset = args.preset
     num_problems = args.num
     preset = RiddlePreset(preset, logger=logger)
+    num_merge = args.merge
     res = {"correct_nohint": 0, "correct_hint": 0, "giveup": 0}
     print("Input your answer for each problem, or")
     print("input one of the following commands:")
-    print("* HINT [NUM]: to obtain a hint for the current problem")
+    print("* HINT [NUM]: to obtain a hint for the current problem " +
+          "(not available when playing merge riddles)")
     print("* GIVEUP: to give up the current problem")
     print("* EXIT: to abort the contest")
     idxs = itertools.count(1) if num_problems == 0 else range(
@@ -246,17 +259,31 @@ def _interactive_contest(args, logger=DEF_SRG_LOGGER):
         tot = str(num_problems) if num_problems > 0 else "inf"
         print("[Question {cur}/{tot}]".format(cur=prob_idx,
                                               tot=tot))
-        prob = preset.generate_problem(logger=logger)
-        print("{}".format(prob.problem))
+        if num_merge <= 1:
+            prob = preset.generate_problem(logger=logger)
+        else:
+            prob = preset.generate_merge_problem(num_merge, logger=logger)
+        if num_merge <= 1:
+            print("{}".format(prob.problem))
+        else:
+            print("{} (merge {} words)".format(prob.problem, num_merge))
+            print("Insert commas between words (e.g. word1,word2,...)")
+            print("Full-width '，' and '、' are also accepted.")
         while True:
             ans = input(">>> ")
             if ans == "GIVEUP":
                 res["giveup"] += 1
                 print("You gave up the problem. :(")
-                print("The answer(s): ", end="")
-                print(", ".join(prob.answers))
+                if num_merge <= 1:
+                    print("The answer(s): ", end="")
+                    print(", ".join(prob.answers))
+                else:
+                    print("One possible answer: {}".format(
+                        " + ".join(prob.ans_words)))
                 break
             elif ans.startswith("HINT"):
+                if num_merge > 1:
+                    print("Hints are not avaiable when playing merge riddles.")
                 try:
                     _, n0 = ans.split()
                     n = int(n0)
@@ -272,11 +299,28 @@ def _interactive_contest(args, logger=DEF_SRG_LOGGER):
                 aborted = True
                 break
             else:
-                judge, ws = prob.judge_answer(ans, logger=logger)
+                judge = False
+                if num_merge <= 1:
+                    judge, ws = prob.judge_answer(ans, logger=logger)
+                else:
+                    ans_words = None
+                    for sep in ACCEPTABLE_SEPARATORS:
+                        try:
+                            ans_words = ans.split(sep)
+                        except Exception:
+                            continue
+                        else:
+                            break
+                    if ans_words is None:
+                        print("Syntax Error. Use appropriate separators.")
+                        continue
+                    else:
+                        judge = prob.judge_answer(ans_words, logger=logger)
                 if judge:
                     print("Your answer '{}' is correct! :)".format(ans))
-                    print("Other possible answer(s): ", end="")
-                    print(", ".join(ws) if ws else "(None)")
+                    if num_merge <= 1:
+                        print("Other possible answer(s): ", end="")
+                        print(", ".join(ws) if ws else "(None)")
                     if hint_used:
                         res["correct_hint"] += 1
                     else:
@@ -341,6 +385,11 @@ def main():
                                 default=0,
                                 type=int
                                 )
+    parser_contest.add_argument("-m", "--merge",
+                                help="to play with merge riddles " +
+                                     "specify the number of words",
+                                default=1,
+                                type=int)
     # arguments (convert)
     parser_convert = subparsers.add_parser("convert",
                                            help="to generate a dictionary " +
