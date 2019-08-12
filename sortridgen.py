@@ -296,6 +296,7 @@ def _interactive_contest(args, logger=DEF_SRG_LOGGER):
                     hints = prob.generate_hints(n, logger=logger)
                 except Exception:
                     print("Error. Check the format and retry.")
+                    print("Maybe the input number is too large.")
                 else:
                     if num_merge <= 1:
                         print("The hint(s): ", end="")
