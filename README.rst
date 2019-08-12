@@ -14,6 +14,7 @@ SortingRiddleGenerator: ソートなぞなぞの出題
 * ソートなぞなぞを自動的に出題する
 * 答え合わせ，別解の提示，成績の集計も行う
 * プリセット機能により，使用する単語リストを容易に切り替えられる
+* マージなぞなぞにも対応
 
 導入
 ====
@@ -77,6 +78,15 @@ SortingRiddleGenerator: ソートなぞなぞの出題
 たとえば，``python sortridgen.py contest --preset ejdic-hand-medium.json`` を実行すると，
 やや難しめの英単語を出題範囲とすることができます．
 
+マージなぞなぞ
+--------------
+
+複数の単語を連結後に整列し，そこから元の単語たちを復元する言葉遊びをマージなぞなぞと呼びます．
+``python sortridgen.py contest --merge [単語数]`` と入力すると，
+ソートなぞなぞの代わりにマージなぞなぞで遊べます．
+使えるコマンドはソートなぞなぞと同様です．
+答えは，単語を「，」「、」「,」のいずれかで区切って入力してください．例えば， 二単語であれば ``word1,word2`` の形式です．
+
 使用できるソートなぞなぞ用辞書と辞書プリセットの例
 ========================================================
 
@@ -119,6 +129,17 @@ NAIST Japanese Dictionary 系プリセット
 上記のファイルに倣って，ソートなぞなぞ用辞書（CSV ファイル）と辞書プリセット（JSON ファイル）を自作することもできます．
 詳細な説明は現在作成中です．
 
+sort_nazonazo 用辞書との相互変換
+---------------------------------
+
+`sort_nazonazo <https://github.com/1119-2916/sort_nazonazo>`_ で用いられる DIC 形式の辞書と，
+ソートなぞなぞ用辞書（CSV 形式）を相互変換することができます．
+詳細な説明は ``python sortridgen.py convert -h`` （CSV 形式へ変換）および
+``python sortridgen.py invconv -h`` （DIC 形式へ変換）を確認してください．
+
+なお，配布物の ``foreign-format-dictionaries`` ディレクトリには，この方法で作成した
+DIC 形式の辞書が格納されています．
+
 ライセンスおよび著作権情報
 ================================
 
@@ -129,8 +150,9 @@ NAIST Japanese Dictionary 系プリセット
 NAIST Japanese Dictionary
 -------------------------
 
-同梱している ``naist-jdic-common-nouns.csv`` は， `NAIST Japanese Dictionary <https://ja.osdn.net/projects/naist-jdic/>`_ の
-``mecab-naist-jdic`` より抽出したものです．NAIST Japanese Dictionary は以下の通り，3 条項 BSD ライセンスで提供されています．::
+同梱している ``naist-jdic-common-nouns.csv`` および
+``naist-jdic-common-nouns.dic`` は， `NAIST Japanese Dictionary <https://ja.osdn.net/projects/naist-jdic/>`_ の
+``mecab-naist-jdic`` より抽出したものです．NAIST Japanese Dictionary は以下の通り，3 条項 BSD ライセンスで提供されています::
 
     Copyright (c) 2009, Nara Institute of Science and Technology, Japan.
 
@@ -166,6 +188,11 @@ NAIST Japanese Dictionary
 更新履歴
 ===============
 
+* Version 0.3.0 (2019-08-12)
+
+  * マージなぞなぞに対応．
+  * ソートなぞなぞ辞書と `sort_nazonazo <https://github.com/1119-2916/sort_nazonazo>`_ の辞書（DIC 形式）との相互変換機能を追加．
+
 * Version 0.2.0 (2019-08-04)
 
   * NAIST Japanese Dictionary 由来の日本語ソートなぞなぞ辞書および辞書プリセットを追加．
@@ -191,7 +218,8 @@ NAIST Japanese Dictionary
 sort_nazonazo
 -------------
 
-`Ti11192916 <https://github.com/1119-2916>`_ さんによる  `sort_nazonazo <https://github.com/1119-2916/sort_nazonazo>`_ は，
+ソートなぞなぞおよびマージなぞなぞを考案した `Ti11192916 <https://github.com/1119-2916>`_ さんは，
+`sort_nazonazo <https://github.com/1119-2916/sort_nazonazo>`_ を作成されました．これは，
 ソートなぞなぞの出題，答え合わせを Discord 上で行える Bot です．
 SortingRiddleGenerator は，ここから着想を得て，
 手元の端末でもソートなぞなぞの練習ができるように作成したものです．
