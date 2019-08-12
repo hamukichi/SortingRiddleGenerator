@@ -186,6 +186,7 @@ class RiddlePreset(object):
         self.minwordlen = self.preset_args["minwordlen"]
         self.maxwordlen = self.preset_args["maxwordlen"]
         self.problem_words = []
+        self.all_orignal_words = set()
         for maindic in self.maindicts:
             for row in maindic.reader:
                 sorted_word = row["sorted_word"]
@@ -195,6 +196,7 @@ class RiddlePreset(object):
         for dic in itertools.chain(self.maindicts, self.subdicts):
             for row in dic.reader:
                 orig_word = row["orig_word"]
+                self.all_orignal_words.add(orig_word)
                 sorted_word = row["sorted_word"]
                 if self.minwordlen <= len(sorted_word) <= self.maxwordlen:
                     self.problem2answer[sorted_word].add(orig_word)
