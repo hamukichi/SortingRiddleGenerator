@@ -23,6 +23,7 @@ import re
 
 
 ACCEPTABLE_FOREIGN_INPUT_FORMATS = ["mecab-naist-jdic", "sort_nazonazo"]
+ACCEPTABLE_FOREIGN_OUTPUT_FORMATS = ["sort_nazonazo"]
 PROG_ROOT_DIR = pathlib.Path(__file__).parent.resolve()
 DEF_DICT_DIR = os.path.join(PROG_ROOT_DIR, "dictionaries")
 DEF_PRESET_DIR = os.path.join(PROG_ROOT_DIR, "presets")
