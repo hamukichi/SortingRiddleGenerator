@@ -319,7 +319,7 @@ def _interactive_contest(args, logger=DEF_SRG_LOGGER):
                                        ACCEPTABLE_SEPARATORS]
                     for cand in ans_words_cands:
                         if len(cand) == num_merge:
-                            ans_words = ans_words_cands[:]
+                            ans_words = cand[:]
                         else:
                             continue
                     if ans_words is None:
