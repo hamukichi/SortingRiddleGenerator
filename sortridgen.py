@@ -285,7 +285,8 @@ def _converter(args, logger=DEF_SRG_LOGGER):
 def _inv_converter(args, logger=DEF_SRG_LOGGER):
     conv_to_foreign_dic(in_path=args.in_path, out_path=args.out_path,
                         format=args.format, out_enc=args.encoding,
-                        min_word_len=args.mi, max_word_len=args.ma,
+                        min_word_len=args.minwordlen,
+                        max_word_len=args.maxwordlen,
                         logger=logger)
 
 
@@ -337,6 +338,28 @@ def main():
                                 help="the path to the output (*.csv)")
     parser_convert.add_argument("-e", "--encoding",
                                 help="the encoding of the input file")
+    # arguments (invconv)
+    parser_invconv = subparsers.add_parser("invconv",
+                                           help="to generate a foreign " +
+                                                "file from a dictionary " +
+                                                " (*.csv)")
+    parser_invconv.set_defaults(func=_inv_converter)
+    parser_invconv.add_argument("format",
+                                help="the format of the output file",
+                                choices=ACCEPTABLE_FOREIGN_OUTPUT_FORMATS)
+    parser_invconv.add_argument("in_path",
+                                help="the path to the input file (*.csv)")
+    parser_invconv.add_argument("out_path",
+                                help="the path to the output file")
+    parser_invconv.add_argument("-e", "--encoding",
+                                help="the encoding of the output file")
+    parser_invconv.add_argument("-m", "--minwordlen",
+                                help="the minimum length of words",
+                                type=int,
+                                default=1)
+    parser_invconv.add_argument("-M", "--maxwordlen",
+                                help="the maximum length of words",
+                                type=int, default=1024)
     # parse
     args = parser.parse_args()
     if args.verbose == 1:
