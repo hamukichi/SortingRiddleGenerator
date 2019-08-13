@@ -7,7 +7,7 @@
 __author__ = "Hamukichi (Nombiri)"
 __version__ = "0.3.0"
 __date__ = "2019-08-12"
-__license__ = "MIT License"
+__license__ = "BSD 3-Clause License"
 
 
 import argparse
